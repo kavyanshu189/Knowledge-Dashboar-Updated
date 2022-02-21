@@ -8,6 +8,8 @@ from email import message
 from email.policy import HTTP
 from lib2to3.pgen2.tokenize import generate_tokens
 import re
+import datetime
+import pytz
 from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -37,81 +39,14 @@ def index(request):
         "variable2":"CDATA is great"
     } 
     return render(request, "authentication/index.html", context)
+
 def about(request):
     return render(request, 'authentication/about.html') 
-
-def contribute(request):
-    if request.method == "POST":
-        ptype=request.POST['ptype']
-        psummary=request.POST['psummary']
-        pdescription=request.POST['pdescription']
-        products=request.POST.getlist('CD')
-        kanalysis=request.POST['kanalysis']
-        kinsisghts=request.POST['kinsisghts']
-        tags=request.POST['tags']
-        owner=request.POST['owner']      
-
-        conn = MongoClient()
-        db=conn.Lucid
-        collection=db.knowledge
-        rec1={"ptype":ptype,
-          "psummary":psummary,
-          "pdescription":pdescription,
-          "products":products,
-          "kanalysis":kanalysis,
-          "kinsisghts":kinsisghts,
-          "tags":tags,
-          "owner":owner,          
-        }
-        collection.insert_one(rec1)
-
-        # added neo4j database
-        #neo4j_create_statemenet = "create (a: Problem{name:'%s'}), (k:Owner {owner:'%s'}), (l:Problem_Type{type:'%s'}),(m:Problem_Summary{summary:'%s'}), (n:Probelm_Description{description:'%s'}),(o:Knowledge_Analysis{analysis:'%s'}), (p:Knowledge_Insights{kinsisghts:'%s'}), (a)-[:Owner]->(k), (a)-[:Problem_Type]->(l), (a)-[:Problem_Summary]->(m), (a)-[:Problem_Description]->(n), (a)-[:Knowledge_analysis]->(o), (a)-[:Knowledge_insights]->(p)"%("Problem",owner,type,summary,description,analysis,insights)
-        neo4j_create_statemenet = '''
-                        merge(a:Problem{name:'%s'})
-                        merge(k:Owner{owner:'%s'})
-                        merge(l:Problem_Type{ptype:'%s'})
-                        merge(m:Problem_Summary{psummary:'%s'})
-                        merge(n:Probelm_Description{pdescription:'%s'})
-                        merge(o:Knowledge_Analysis{kanalysis:'%s'})
-                        merge(p:Knowledge_Insights{kinsisghts:'%s'})
-                        merge(a)-[:Owner]->(k)
-                        merge(a)-[:Problem_Type]->(l)
-                        merge(a)-[:Problem_Summary]->(m)
-                        merge(a)-[:Problem_Description]->(n)
-                        merge(a)-[:Knowledge_analysis]->(o)
-                        merge(a)-[:Knowledge_insights]->(p)
-
-                        merge(k)-[:Problem_Type]->(l)
-                        merge(k)-[:Problem_Summary]->(m)
-                        merge(k)-[:Problem_Description]->(n)
-                        merge(k)-[:Knowledge_analysis]->(o)
-                        merge(k)-[:Knowledge_insights]->(p)
-        '''%("Problem",owner,ptype,psummary,pdescription,kanalysis,kinsisghts)
-        data_base_connection = GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
-        session = data_base_connection.session()    
-        session.run(neo4j_create_statemenet)
-
-        messages.success(request, 'Your message has been sent!')
-    return render(request, 'authentication/contribute.html')
-
-
-def defects(request):
-    conn = MongoClient()
-    db=conn.Lucid
-    collection=db.knowledge
-    defectdata =collection.find({'ptype':'defect'})
-
-    
-    #for x in defectdata:
-     #   print(x)
-    
-   
-    return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
 
 def signup(request):
     
     if request.method == "POST":
+        # global username 
         username = request.POST.get('username')
         fname = request.POST['fname']
         lname = request.POST['lname']
@@ -176,6 +111,83 @@ def signup(request):
         return redirect('signin')
     
     return render(request, "authentication/signup.html")
+
+def contribute(request):
+    if request.method == "POST":
+        ptype=request.POST['ptype']
+        psummary=request.POST['psummary']
+        pdescription=request.POST['pdescription']
+        products=request.POST.getlist('CD')
+        kanalysis=request.POST['kanalysis']
+        kinsisghts=request.POST['kinsisghts']
+        tags=request.POST['tags']
+        owner=request.POST['owner']     
+        datetime_entry = datetime.datetime.now() 
+        # username = request.session.get('username') 
+        conn = MongoClient()
+        db=conn.Lucid
+        collection=db.knowledge
+        # username=signup.username
+        
+        # # if datetime_logout1 is None:
+        #     datetime_logout1=0  
+        rec1={
+          "username":username1,          
+          "ptype":ptype,
+          "psummary":psummary,
+          "pdescription":pdescription,
+          "products":products,
+          "kanalysis":kanalysis,
+          "kinsisghts":kinsisghts,
+          "tags":tags,
+          "owner":owner,
+          "date_of_entry":datetime_entry.strftime('%Y/%m/%d %I:%M:%S:%p'),
+          "date_of_login":datetime_login1.strftime('%Y/%m/%d %I:%M:%S:%p'),
+        #   "date_of_logout":datetime_logout1
+        }
+        collection.insert_one(rec1)
+
+        # added neo4j database
+        #neo4j_create_statemenet = "create (a: Problem{name:'%s'}), (k:Owner {owner:'%s'}), (l:Problem_Type{type:'%s'}),(m:Problem_Summary{summary:'%s'}), (n:Probelm_Description{description:'%s'}),(o:Knowledge_Analysis{analysis:'%s'}), (p:Knowledge_Insights{kinsisghts:'%s'}), (a)-[:Owner]->(k), (a)-[:Problem_Type]->(l), (a)-[:Problem_Summary]->(m), (a)-[:Problem_Description]->(n), (a)-[:Knowledge_analysis]->(o), (a)-[:Knowledge_insights]->(p)"%("Problem",owner,type,summary,description,analysis,insights)
+        graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
+        session=graphdb.session()
+        q2='''Merge (a:Owner {owner:'%s'})
+        Merge (b:Problem_Type{ptype:'%s'}) 
+        Merge(c:Problem_Summary{psummary:'%s'})
+        Merge (d:Problem_Description{pdescription:'%s'})
+        Merge (e:Knowledge_Analysis{kanalysis:'%s'})
+        Merge(f:Knowledge_Insights{kinsisghts:'%s'})
+        Merge (g:Tag{tag:'%s'})
+        Merge (h:Product{product:'%s'})
+        MERGE (b)-[:OWNER]->(a)
+        MERGE (b)-[:PROBLEM_SUMMARY]->(c)
+        MERGE (b)-[:PROBLEM_DESCRIPTION]->(d)
+        MERGE (b)-[:KNOWLEDGE_ANALYSIS]->(e)
+        MERGE (b)-[:KNOWLEDGE_INSIGHTS]->(f)
+        MERGE (b)-[:TAG]->(g)
+        MERGE (b)-[:PRODUCT]->(h)'''%(owner,ptype,psummary,pdescription,kanalysis,kinsisghts,tags,*products)
+        q1=" match(n) return n "
+    
+        session.run(q2)
+        session.run(q1)
+
+        messages.success(request, 'Your message has been sent!')
+    return render(request, 'authentication/contribute.html')
+
+
+def defects(request):
+    conn = MongoClient()
+    db=conn.Lucid
+    collection=db.knowledge
+    defectdata =collection.find({'ptype':'defect'})
+
+    
+    #for x in defectdata:
+     #   print(x)
+    
+   
+    return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
+
     
 def index(request):
     print(request.user)
@@ -196,11 +208,22 @@ def signin(request):
         if user is not None:
              login(request, user)
              fname = user.first_name
+            #  conn = MongoClient()
+            #  db=conn.Lucid
+            #  collection=db.knowledge
+            #  rec1={"username":username,}
+            #  collection.insert_one(rec1)
+             global username1
+             username1=username
+             datetime_login = datetime.datetime.now()
+             global datetime_login1
+             datetime_login1=datetime_login
              return render(request, "authentication/index.html", {'fname': fname})
              
         else:
             messages.error(request, "Bad Credentials!")
             return redirect('signin')
+    
     
     return render(request, "authentication/signin.html")
 
@@ -208,6 +231,9 @@ def signin(request):
 
 def signout(request):
     logout(request)
+    datetime_logout = datetime.datetime.now()
+    global datetime_logout1
+    datetime_logout1=datetime_logout
     messages.success(request, "Logged Out Successfully")
     return redirect('home')
 

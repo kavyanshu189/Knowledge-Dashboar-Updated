@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+        </head>
+    <body><nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Knowledge Platform</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          </li>      
+      
+          <li class="nav-item">
+            <a class="nav-link" href="/contribute">Contribute</a>
+          </li>
+          
+      </div>
+      
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary" >Action</button>
+        <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="visually-hidden"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="/signup" >Sign up</a></li>
+          <li><a class="dropdown-item" href="/signin">Sign in</a></li>
+          <li><a class="dropdown-item" href="/signout">Sign out</a></li>
+        </ul>
+      </div>
+    </nav>
+        <div class="container-fluid px-0 mb-3" >
+    <img src="https://source.unsplash.com/1200x400/?Gmail" class="d-block w-100 mx-0" alt="...">
+</div>
+<div class="container mb-3 py-4">
+    <h1 class="text-center">Contribute Knowledge</h1>
+    <center>
+    <form method="post" action="/contribute">
+    {% csrf_token %}
+        <div class="form-group">
+            <label for="ptype">Problem Type</label> 
+            
+            <select id="ptype" name="ptype">
+                <option value="defect">Defect</option>
+                <option value="enhancement">Enhancement</option>
+                <option value="supportticket">Support Ticket</option>
+                <option value="opportunity">Opportunity</option>
+            </select> 
+        </div>
+
+        <div class="form-group">
+            <label for="psummary">Problem Summary</label> 
+            <input type="text" id="psummary" name="psummary">
+        </div>
+        
+        <div class="form-group">
+            <label for="pdescription">Problem Description</label> 
+            <input type="text" id="pdescription" name="pdescription">
+        </div>      
+        
+        <div class="form-group">
+          <label for="CD">Products Mapped: </label><br>
+          <input type="checkbox" name="CD" value="CData Drivers">CData Drivers
+          <input type="checkbox" name="CD" value="CData ArcESB">CData ArcESB
+          <input type="checkbox" name="CD" value="CData Connect">CData Connect
+          <input type="checkbox" name="CD" value="CData Sync">CData Sync
+          <input type="checkbox" name="CD" value="CData Server">CData Server
+          <input type="checkbox" name="CD" value="CData DBAmp">CData DBAmp
+      </div>
+
+        <div class="form-group">
+            <label for="kanalysis">Knowledge Analysis</label> 
+            <input type="text" id="kanalysis" name="kanalysis">
+        </div>      
+        
+        <div class="form-group">
+            <label for="kinsisghts">Knowledge Insights</label> 
+            <input type="text" id="kinsisghts" name="kinsisghts">
+        </div>   
+
+        <div class="form-group">
+            <label for="tags">Knowledge tags</label> 
+            <input type="text" id="tags" name="tags" >
+        </div> 
+        <div class="form-group">
+            <label for="owner">Owner</label> 
+            <input type="text" id="owner" name="owner">
+        </div>   
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+</center>
+
+</div>
+</body>
+</html> 

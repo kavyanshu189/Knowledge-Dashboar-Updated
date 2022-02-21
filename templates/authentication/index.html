@@ -61,7 +61,7 @@
 
 
 </head>
-<body><nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<body><nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">Knowledge Platform</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -80,16 +80,15 @@
     </ul>
   </div>
   <div class="btn-group">
-    <button type="button" class="btn btn-secondary">Action</button>
-    <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+    <img type="button" src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/30/ffffff/external-user-interface-kiranshastry-lineal-kiranshastry-1.png" class="btn btn-primary"/>
+    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" >
+      <p style="display:inline">{{user.first_name}}</p>
       <span class="visually-hidden"></span>
     </button>
     <ul class="dropdown-menu">
       <li><a class="dropdown-item" href="/signup" >Sign up</a></li>
       <li><a class="dropdown-item" href="/signin">Sign in</a></li>
       <li><a class="dropdown-item" href="/signout">Sign out</a></li>
-      {% comment %} <li><hr class="dropdown-divider"></li>
-      <li><a class="dropdown-item" href="#">Separated link</a></li> {% endcomment %}
     </ul>
   </div>
 </nav>
@@ -112,8 +111,8 @@
               <img src="/static/5.jfif" class="d-block w-100" height=500px alt="...">
 
         <div class="carousel-caption d-none d-md-block">
-            <h5 style="color:black;"><strong>Here the employees share their Knowledge.</strong></h5>
-            <p style="color:black;"><strong>This Knowledge will help other employees to get an insight</strong></p>
+            <h5 style="color:white;"><strong>Here the employees share their Knowledge.</strong></h5>
+            <p style="color:white;"><strong>This Knowledge will help other employees to get an insight</strong></p>
         </div>
         </div>
         <div class="carousel-item">
@@ -134,7 +133,6 @@
     </a>
     </div>
 </div>
-<!-- <img src="https://source.unsplash.com/1200x900/?Knowledge" class="d-block w-100" alt="..."> -->
 
 <div class="container my-3">
 <h1 class="my-4 text-center">Select from our top Knowledges</h1>

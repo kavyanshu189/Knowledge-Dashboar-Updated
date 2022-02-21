@@ -14,7 +14,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <title> {% block title %}Sign Up{% endblock title %} | Knowledge Platform</title>
 </head>
-    <body><nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <body>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="#">Knowledge Platform</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -33,24 +34,23 @@
       </div>
       
       <div class="btn-group">
-        <button type="button" class="btn btn-secondary" >Action</button>
-        <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+        <img type="button" src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/30/ffffff/external-user-interface-kiranshastry-lineal-kiranshastry-1.png" class="btn btn-primary"/>
+        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" >
+          <p style="display:inline">{{user.first_name}}</p>
           <span class="visually-hidden"></span>
         </button>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="/signup" >Sign up</a></li>
           <li><a class="dropdown-item" href="/signin">Sign in</a></li>
           <li><a class="dropdown-item" href="/signout">Sign out</a></li>
-          {% comment %} <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Separated link</a></li> {% endcomment %}
         </ul>
       </div>
 
     </nav>
 
-        <section style="background-color:#00aaff";>
-            <h1><center>Welcome to Knowledge Platform</center></h1>
-            <h4><center> A platform designed by CData to let users input any knowledge they have percieved and help others through the use of that knowledge.</center><h4>
+        <section style="background-color:#00a0ff">
+            <h2 style="color: #ffffff"><center>Welcome to Knowledge Platform</center></h2>
+            <h4 style="color: #ffffff"><center> A platform designed by CData to let users input any knowledge they have percieved and help others through the use of that knowledge.</center><h4>
         </section><br><br>
         <section style="text-align:justify;">
     

@@ -48,11 +48,13 @@
 
     </nav>
 
-        <section style="background-color:#00a0ff">
-            <h2 style="color: #ffffff"><center>Welcome to Knowledge Platform</center></h2>
-            <h4 style="color: #ffffff"><center> A platform designed by CData to let users input any knowledge they have percieved and help others through the use of that knowledge.</center><h4>
-        </section><br><br>
-        <section style="text-align:justify;">
+    <section style="background-color:#00a0ff; height:25vh; " >
+      <br>
+      <h1  style="color: #ffffff"><center>Welcome to Knowledge Platform</center></h1>
+      <br><br>
+      <h4 style="color: #ffffff"><center> A platform designed by CData to let users input any knowledge they have percieved and help others through the use of that knowledge.</center><h4>
+    </section><br>
+    <section style="text-align:justify;">
     
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }} alert-dismissable fade show" roles="alert">

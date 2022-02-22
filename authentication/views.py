@@ -262,11 +262,12 @@ def jira(request):
     #jiraOptions = {'server': serv}
 
     jira = JIRA(options=jiraOptions, basic_auth=("mangalyogesh.22@gmail.com", "B8DrrneqVJcOGbyzHJ8jDC9F"))
+    #creds of shashank: "shashankshukla137@gmail.com", "R71mWwO95pvcFo48tnpG9F8A"
     #jira = JIRA(options=jiraOptions, basic_auth=(gm, tok))
     
-    for singleIssue in jira.search_issues(jql_str='project = Knowledgeplatform'):
+    for singleIssue in jira.search_issues(jql_str='project = knowledgeplatform'):
         print('{}: {}:{}'.format(singleIssue.key, singleIssue.fields.summary,singleIssue.fields.reporter.displayName))
-    for singleIssue in jira.search_issues(jql_str='project = Knowledgeplatform'):
+    for singleIssue in jira.search_issues(jql_str='project = knowledgeplatform'):
         if(singleIssue.key==jiraid):
             print("Field Summary is",singleIssue.fields.summary)
             print("Reporter Name is",singleIssue.fields.reporter.displayName)
@@ -276,7 +277,7 @@ def jira(request):
 
     global d
     d={'key':[],'summary':[],'name':[]}
-    for singleIssue in jira.search_issues(jql_str='project = Knowledgeplatform'):
+    for singleIssue in jira.search_issues(jql_str='project = knowledgeplatform'):
         d['key'].append(singleIssue.key)
         d['summary'].append(singleIssue.fields.summary)
         d['name'].append(singleIssue.fields.reporter.displayName)    

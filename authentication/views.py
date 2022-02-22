@@ -29,7 +29,7 @@ from django.utils.http import urlsafe_base64_decode
 from neo4j import GraphDatabase
 import pandas
 import numpy
-
+from jira import JIRA
 
 
 # Create your views here.
@@ -180,7 +180,6 @@ def defects(request):
     db=conn.Lucid
     collection=db.knowledge
     defectdata =collection.find({'ptype':'defect'})
-
     return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
 
     
@@ -241,4 +240,50 @@ def activate(request, uidb64, token):
         return redirect('home')
     else:
         return render(request, 'activation_failed.html')
+
+
+def jira(request):
+    jiraid=request.POST.get('jiraid')
+    # print(jiraid)
+    pname=str(request.POST.get('pname'))
+    #print(pname)
     
+    #serv="https://"+pname+".atlassian.net/"
+    #print(serv)
+
+    gm=str(request.POST.get('email'))
+    print(gm)
+    
+    tok=str(request.POST.get('token'))
+    print(tok)
+
+
+    jiraOptions = {'server': "https://knowledgeplatform.atlassian.net/"}
+    #jiraOptions = {'server': serv}
+
+    jira = JIRA(options=jiraOptions, basic_auth=("mangalyogesh.22@gmail.com", "B8DrrneqVJcOGbyzHJ8jDC9F"))
+    #jira = JIRA(options=jiraOptions, basic_auth=(gm, tok))
+    
+    for singleIssue in jira.search_issues(jql_str='project = Knowledgeplatform'):
+        print('{}: {}:{}'.format(singleIssue.key, singleIssue.fields.summary,singleIssue.fields.reporter.displayName))
+    for singleIssue in jira.search_issues(jql_str='project = Knowledgeplatform'):
+        if(singleIssue.key==jiraid):
+            print("Field Summary is",singleIssue.fields.summary)
+            print("Reporter Name is",singleIssue.fields.reporter.displayName)
+            break
+    else:
+        print("Jira Id is Invalid")
+
+    global d
+    d={'key':[],'summary':[],'name':[]}
+    for singleIssue in jira.search_issues(jql_str='project = Knowledgeplatform'):
+        d['key'].append(singleIssue.key)
+        d['summary'].append(singleIssue.fields.summary)
+        d['name'].append(singleIssue.fields.reporter.displayName)    
+    print(d,type(d))
+
+    return render(request,'knowledgepages/jira.html')
+
+
+def jiradisplay(request):
+    return render(request,'knowledgepages/jiradisplay.html',d)

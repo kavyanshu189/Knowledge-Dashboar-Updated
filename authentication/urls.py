@@ -13,6 +13,8 @@ urlpatterns = [
    path('signout', views.signout, name="signout"),
    path('activate/<uidb64>/<token>/', views.activate, name="activate"),
    path('defects', views.defects,name='defects'),
+   path('jira', views.jira,name='jira'),
+   path('jiradisplay', views.jiradisplay,name='jiradisplay'),
 
    
 ]

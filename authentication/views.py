@@ -181,18 +181,11 @@ def defects(request):
     collection=db.knowledge
     defectdata =collection.find({'ptype':'defect'})
 
-    
-    #for x in defectdata:
-     #   print(x)
-    
-   
     return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
 
     
 def index(request):
     print(request.user)
-    # if request.user.is_anonymous:
-    #     return redirect("/login") 
     return render(request, "authentication/index.html")
 
 def signin(request):  
@@ -208,11 +201,7 @@ def signin(request):
         if user is not None:
              login(request, user)
              fname = user.first_name
-            #  conn = MongoClient()
-            #  db=conn.Lucid
-            #  collection=db.knowledge
-            #  rec1={"username":username,}
-            #  collection.insert_one(rec1)
+             current_user = {}
              global username1
              username1=username
              datetime_login = datetime.datetime.now()

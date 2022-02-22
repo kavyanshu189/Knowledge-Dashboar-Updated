@@ -182,6 +182,28 @@ def defects(request):
     defectdata =collection.find({'ptype':'defect'})
     return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
 
+def enhancements(request):
+    conn = MongoClient()
+    db=conn.Lucid
+    collection=db.knowledge
+    enhancementdata =collection.find({'ptype':'enhancement'})
+    return render(request, 'knowledgepages/enhancements.html', {'enhancementdata': enhancementdata.clone()})
+
+def supportticket(request):
+    conn = MongoClient()
+    db=conn.Lucid
+    collection=db.knowledge
+    supportdata =collection.find({'ptype':'supportticket'})
+    return render(request, 'knowledgepages/supportticket.html', {'supportdata': supportdata.clone()})
+
+def opportunity(request):
+    conn = MongoClient()
+    db=conn.Lucid
+    collection=db.knowledge
+    opportunitydata =collection.find({'ptype':'opportunity'})
+    return render(request, 'knowledgepages/opportunity.html', {'opportunitydata': opportunitydata.clone()})
+
+
     
 def index(request):
     print(request.user)
@@ -261,8 +283,7 @@ def jira(request):
     jiraOptions = {'server': "https://knowledgeplatform.atlassian.net/"}
     #jiraOptions = {'server': serv}
 
-    jira = JIRA(options=jiraOptions, basic_auth=("mangalyogesh.22@gmail.com", "B8DrrneqVJcOGbyzHJ8jDC9F"))
-    #creds of shashank: "shashankshukla137@gmail.com", "R71mWwO95pvcFo48tnpG9F8A"
+    jira = JIRA(options=jiraOptions, basic_auth=("mangalyogesh.22@gmail.com", "ErpY3q33wtyhG0GFFvp88C01"))
     #jira = JIRA(options=jiraOptions, basic_auth=(gm, tok))
     
     for singleIssue in jira.search_issues(jql_str='project = knowledgeplatform'):

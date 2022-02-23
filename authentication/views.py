@@ -328,17 +328,27 @@ def freshdesk(request):
     domain=str(request.POST.get('domain'))
     
     a = API('knowledgeplatform.freshdesk.com', 'OZ1JWc0QQielVNhYIFQ3',)
-    ticket = a.tickets.create_ticket('This is my third ticket',
-                                 email='misrasmriti2807@gmail.com',
-                                 description='This is the description of the ticket',
-                                 tags=['example'])
+    # ticket = a.tickets.create_ticket('This is my third ticket',
+    #                              email='misrasmriti2807@gmail.com',
+    #                              description='This is the description of the ticket',
+    #                              tags=['example'])
     
     ticket = a.tickets.list_tickets(filter_name=None)
+    ticket1 = a.tickets.get_ticket(4)
+    print("Ticket is created at :",end="\t" )
+    print(ticket1.created_at)
+    print(ticket1.priority)
+    # print(ticket1.source)
+    print(ticket1.status)
+    # print(ticket1.stats)
+    
     global freshdesk_Ticket
     freshdesk_Ticket={'ticket':[]}
     for i in ticket:
-        freshdesk_Ticket['ticket'].append(i)   
-    print(freshdesk_Ticket,type(freshdesk_Ticket))
+        freshdesk_Ticket['ticket'].append(i) 
+        # print(i.keys)
+
+    # print(freshdesk_Ticket)
     return render(request,'knowledgepages/freshdesk.html')
 
 def freshdeskdisplay(request):

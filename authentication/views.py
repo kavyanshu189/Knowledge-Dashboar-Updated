@@ -182,6 +182,17 @@ def defects(request):
     defectdata =collection.find({'ptype':'defect'})
     return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
 
+def defect(request):
+    # conn = MongoClient()
+    # db=conn.Lucid
+    # collection=db.knowledge
+    # defectdata =collection.find({'ptype':'defect'})
+    graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
+    session=graphdb.session()
+    q3="Match (t:Problem_Type)-[r:PROBLEM_DESCRIPTION]-> (c:Problem_Description) return t.ptype AS p_type,c.pdescription AS p_description"
+    nodes=session.run(q3)
+    return render(request, 'knowledgepages/defect.html', {'nodes': nodes}) 
+
 def enhancements(request):
     conn = MongoClient()
     db=conn.Lucid

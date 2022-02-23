@@ -27,7 +27,7 @@
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Knowledges
+              Filter Knowledges
             </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="defects">Defects</a>
@@ -62,14 +62,14 @@
         {% endif %}
       </div>
     </nav>
-    <section style="background-color:#00a0ff; height:25vh; " >
+    <section style="background-color:#00a0ff; height:25; " >
       <br>
-      <h1  style="color: #ffffff"><center>Welcome to Knowledge Platform</center></h1>
-      <h4 style="color: #ffffff"><center> A platform designed by CData to let users input any knowledge they have percieved and help others through the use of that knowledge.</center><h4>
-    </section><br>
+      <h1  style="color: #ffffff"><center>Welcome to Knowledge Platform</center></h1><br>
+      <h4 style="color: #ffffff"><center> A platform designed by CData to let users input any knowledge they have percieved and help others through the use of that knowledge.</center></h4><br>
+    </section>
     {% if user.is_authenticated %}
 <div class="container mb-3 py-4">
-    <h1 class="text-center">Contribute Knowledge</h1>
+    <h1 class="text-center" style = "color : #00a0ff";>Contribute Knowledge</h1><br>
     <center>
     <form method="post" action="/contribute">
     {% csrf_token %}

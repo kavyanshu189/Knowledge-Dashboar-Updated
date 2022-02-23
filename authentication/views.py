@@ -294,7 +294,7 @@ def jira(request):
     jiraOptions = {'server': "https://knowledgeplatform.atlassian.net/"}
     #jiraOptions = {'server': serv}
 
-    jira = JIRA(options=jiraOptions, basic_auth=("mangalyogesh.22@gmail.com", "ErpY3q33wtyhG0GFFvp88C01"))
+    jira = JIRA(options=jiraOptions, basic_auth=("mangalyogesh.22@gmail.com", "BogYRmdVeMLMovCwAGdHE13F"))
     #jira = JIRA(options=jiraOptions, basic_auth=(gm, tok))
     
     for singleIssue in jira.search_issues(jql_str='project = knowledgeplatform'):

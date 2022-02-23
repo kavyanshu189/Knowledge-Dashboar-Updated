@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from datetime import datetime
+from freshdesk.api import API
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, authenticate, login
@@ -321,3 +322,27 @@ def jira(request):
 
 def jiradisplay(request):
     return render(request,'knowledgepages/jiradisplay.html',d)
+
+def freshdesk(request):
+    api=request.POST.get('api')
+    domain=str(request.POST.get('domain'))
+    
+    a = API('knowledgeplatform.freshdesk.com', 'OZ1JWc0QQielVNhYIFQ3',)
+    ticket = a.tickets.create_ticket('This is my third ticket',
+                                 email='misrasmriti2807@gmail.com',
+                                 description='This is the description of the ticket',
+                                 tags=['example'])
+    
+    ticket = a.tickets.list_tickets(filter_name=None)
+    global freshdesk_Ticket
+    freshdesk_Ticket={'ticket':[]}
+    for i in ticket:
+        freshdesk_Ticket['ticket'].append(i)   
+    print(freshdesk_Ticket,type(freshdesk_Ticket))
+    return render(request,'knowledgepages/freshdesk.html')
+
+def freshdeskdisplay(request):
+    return render(request, 'knowledgepages/freshdeskdisplay.html',freshdesk_Ticket)
+
+
+

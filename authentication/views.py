@@ -62,13 +62,13 @@ def signup(request):
             messages.error(request, "Email already registered!")
             return redirect('home')
         
-        if len(username)>10:
-            messages.error(request, "Username must be under 10 characters")
+        # if len(username)>10:
+        #     messages.error(request, "Username must be under 10 characters")
             
             
-        if not username.isalnum():
-            messages.error(request, "Username must be Alpha-Numeric!")
-            return redirect('home')
+        # if not username.isalnum():
+        #     messages.error(request, "Username must be Alpha-Numeric!")
+        #     return redirect('home')
         
      
         myuser = User.objects.create_user(username, email, pass1)

@@ -31,6 +31,8 @@ from neo4j import GraphDatabase
 import pandas
 import numpy
 from jira import JIRA
+from simple_salesforce import Salesforce
+import requests
 
 
 # Create your views here.
@@ -354,5 +356,32 @@ def freshdesk(request):
 def freshdeskdisplay(request):
     return render(request, 'knowledgepages/freshdeskdisplay.html',freshdesk_Ticket)
 
+    # Salesforce
+def salesforce(request):
+    sf = Salesforce(
+    username='af@gcet.com', 
+    password='admin123', 
+    security_token='G7wSptekqNONY1L3hBSs9T27')
+    
+    sf_data = sf.query_all("SELECT Id, Name, Type FROM Opportunity LIMIT 20")
+    global sfd
+    
+    sfd={'Id':[],'Name':[], 'Type':[]}
+    sfdr=sf_data['records']
+    for sfdata in sfdr:
+        print(f"{sfdata['Id']} -- {sfdata['Name']} -- {sfdata['Type']}")
+        sfd['Id'].append(sfdata['Id'])
+        sfd['Name'].append(sfdata['Name'])
+        sfd['Type'].append(sfdata['Type'])
+        
+    
+    print(type(sf_data))
+
+    return render(request, 'knowledgepages/salesforce.html')
+      
+
+def salesforcedisplay(request):
+    
+    return render(request, 'knowledgepages/salesforcedisplay.html',sfd)
 
 

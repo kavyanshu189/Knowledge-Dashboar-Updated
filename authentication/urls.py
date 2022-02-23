@@ -26,6 +26,6 @@ urlpatterns = [
    path('jiradisplay', views.jiradisplay,name='jiradisplay'),
    path('freshdesk', views.freshdesk,name='freshdesk'),
    path('freshdeskdisplay', views.freshdeskdisplay,name='freshdeskdisplay'),
-
-   
+   path('salesforce', views.salesforce,name='salesforce'),
+   path('salesforcedisplay', views.salesforcedisplay,name='salesforcedisplay'),
 ]

@@ -172,6 +172,7 @@ def contribute(request):
         session.run(q1)
 
         messages.success(request, 'Your message has been sent!')
+        return redirect('signout')
     return render(request, 'authentication/contribute.html')
 
 

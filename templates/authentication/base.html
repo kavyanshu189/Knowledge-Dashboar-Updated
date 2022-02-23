@@ -36,11 +36,19 @@
     <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
       <span class="visually-hidden"></span>
     </button>
+    {% if user.is_authenticated %}
+    <ul class="dropdown-menu">
+      {% comment %} <li><a class="dropdown-item" href="/signup" >Sign up</a></li> {% endcomment %}
+      {% comment %} <li><a class="dropdown-item" href="/signin">Sign in</a></li> {% endcomment %}
+      <li><a class="dropdown-item" href="/signout">Sign out</a></li>
+    </ul>
+    {% else %}
     <ul class="dropdown-menu">
       <li><a class="dropdown-item" href="/signup" >Sign up</a></li>
       <li><a class="dropdown-item" href="/signin">Sign in</a></li>
-      <li><a class="dropdown-item" href="/signout">Sign out</a></li>
+      {% comment %} <li><a class="dropdown-item" href="/signout">Sign out</a></li> {% endcomment %}
     </ul>
+    {% endif %}
   </div>
 
 

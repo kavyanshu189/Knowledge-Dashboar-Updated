@@ -47,19 +47,27 @@
           <p style="display:inline">{{user.first_name}}</p>
           <span class="visually-hidden"></span>
         </button>
+        {% if user.is_authenticated %}
+        <ul class="dropdown-menu">
+          {% comment %} <li><a class="dropdown-item" href="/signup" >Sign up</a></li> {% endcomment %}
+          {% comment %} <li><a class="dropdown-item" href="/signin">Sign in</a></li> {% endcomment %}
+          <li><a class="dropdown-item" href="/signout">Sign out</a></li>
+        </ul>
+        {% else %}
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="/signup" >Sign up</a></li>
           <li><a class="dropdown-item" href="/signin">Sign in</a></li>
-          <li><a class="dropdown-item" href="/signout">Sign out</a></li>
+          {% comment %} <li><a class="dropdown-item" href="/signout">Sign out</a></li> {% endcomment %}
         </ul>
+        {% endif %}
       </div>
     </nav>
     <section style="background-color:#00a0ff; height:25vh; " >
       <br>
       <h1  style="color: #ffffff"><center>Welcome to Knowledge Platform</center></h1>
-      <br><br>
       <h4 style="color: #ffffff"><center> A platform designed by CData to let users input any knowledge they have percieved and help others through the use of that knowledge.</center><h4>
     </section><br>
+    {% if user.is_authenticated %}
 <div class="container mb-3 py-4">
     <h1 class="text-center">Contribute Knowledge</h1>
     <center>
@@ -75,6 +83,7 @@
                 <option value="opportunity">Opportunity</option>
             </select> 
         </div>
+
 
         <div class="form-group">
             <label for="psummary">Problem Summary</label> 
@@ -117,7 +126,15 @@
         </div>   
         <button class="btn btn-primary" type="submit">Submit</button>
     </form>
-</center>
+  </center>
+    {% else %}
+    <center>
+    <h3> Oops!! You are not logged in.</h3>
+    <p> Please Login to contribute knowledge</p>
+    <button type="submit"><a href="/signin">LogIn</a></button>
+    </center>
+    {% endif %}
+
 
 </div>
 </body>

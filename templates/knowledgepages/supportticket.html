@@ -63,11 +63,19 @@
           <p style="display:inline">{{user.first_name}}</p>
           <span class="visually-hidden"></span>
         </button>
+        {% if user.is_authenticated %}
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="/signup" >Sign up</a></li>
-          <li><a class="dropdown-item" href="/signin">Sign in</a></li>
+          {% comment %} <li><a class="dropdown-item" href="/signup" >Sign up</a></li> {% endcomment %}
+          {% comment %} <li><a class="dropdown-item" href="/signin">Sign in</a></li> {% endcomment %}
           <li><a class="dropdown-item" href="/signout">Sign out</a></li>
         </ul>
+        {% else %}
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="/signup" >Sign up</a></li>
+      <li><a class="dropdown-item" href="/signin">Sign in</a></li>
+      {% comment %} <li><a class="dropdown-item" href="/signout">Sign out</a></li> {% endcomment %}
+    </ul>
+    {% endif %}
       </div>
     </nav>
     <section style="background-color:#00a0ff; height:25vh; " >

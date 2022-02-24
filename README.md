@@ -13,5 +13,5 @@ For Salesforce Installation:
 pip install simple_salesforce
 
 For Freshdesk Installation:
-pip install pytest
+pip install pytest and 
 pip install python-freshdesk

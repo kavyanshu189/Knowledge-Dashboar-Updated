@@ -298,7 +298,7 @@ def jira(request):
     jiraOptions = {'server': "https://knowledgeplatform.atlassian.net/"}
     #jiraOptions = {'server': serv}
 
-    jira = JIRA(options=jiraOptions, basic_auth=("mangalyogesh.22@gmail.com", "3TUrgCSma6HZGy6PKKWj3EE3"))
+    jira = JIRA(options=jiraOptions, basic_auth=("akshaysrivastava0406@gmail.com", "ASOQ6fJbuTie2ysONaENA07E"))
     #jira = JIRA(options=jiraOptions, basic_auth=(gm, tok))
     
     for singleIssue in jira.search_issues(jql_str='project = knowledgeplatform'):
@@ -322,7 +322,9 @@ def jira(request):
 
 
 def jiradisplay(request):
-    return render(request,'knowledgepages/jiradisplay.html',d)
+    ml=zip(d['key'],d['summary'],d['name'])
+    context={'ml':ml,}
+    return render(request,'knowledgepages/jiradisplay.html',context)
 
 def freshdesk(request):
     api=request.POST.get('api')
@@ -380,7 +382,8 @@ def salesforce(request):
       
 
 def salesforcedisplay(request):
-    
-    return render(request, 'knowledgepages/salesforcedisplay.html',sfd)
+    mlt=zip(sfd['Id'],sfd['Name'],sfd['Type'])
+    context={'mlt':mlt,}
+    return render(request, 'knowledgepages/salesforcedisplay.html',context)
 
 

@@ -9,8 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
     <link rel="icon" href="https://klaindustries.com/wp-content/uploads/2017/07/Light-bulb-icon.png" width="300" height="300" type="image/icon type">
-    <title> {% block title %}Jira Display{% endblock title %} | Knowledge Platform</title>
-  </head>
+    </head>
     <body>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="#">KNOWLEDGE PLATFORM</a>
@@ -83,22 +82,20 @@
     
 <div class="container mb-3 py-4">
     <h1 class="text-center">JIRA DISPLAY</h1>
-    <center>
-          
-      
-        {% comment %} d={'key': ['KP-8', 'KP-7', 'KP-6', 'KP-1'], 'summary': ['loc', 'yt', 'Solve some bugs in Knowledge Platform', 'this is a test bug'], 'name': ['Yogesh Mangal', 'Yogesh Mangal', 'Yogesh Mangal', 'Shashank Shukla']} {% endcomment %}
+    <center>              
         
         <table> <thead> <tr> <th>Key</th> <th>Summary</th> <th>Name</th></tr> </thead> <tbody>
-        
+      {% for i,j,k in ml%}
     <tr>
-        <td> {{ key }} </td> <br><br>
-        <td> {{ summary }} </td><br><br>
-        <td> {{ name }} </td><br>
+        <td> {{ i }} &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td> 
+        <td> {{ j }} &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+        <td> {{ k }} &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
     </tr>
+    {% endfor %}
 </tbody>
 </table>
         </center>
     
 </div>
 </body>
-</html> 
+</html>

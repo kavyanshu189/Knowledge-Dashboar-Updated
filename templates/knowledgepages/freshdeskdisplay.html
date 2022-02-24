@@ -87,7 +87,12 @@
           <p> <strong>Ticket</strong></p>
         
       
-      {% for item in ticket %} {{ item }}<br> {% endfor %}   
+          {% for item in ticket %}
+            Ticket is created at : {{ item.created_at}}<br>
+            The <strong>priority</strong> of ticket is : {{ item.priority}}<br>
+            The <strong>status</strong> of ticket is : {{ item.status}}<br>
+            The <strong>Description</strong> of ticket is : <br>{{item}}<br><br>
+          {% endfor %}
   
           </center>
       

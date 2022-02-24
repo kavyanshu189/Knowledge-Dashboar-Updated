@@ -298,7 +298,7 @@ def jira(request):
     jiraOptions = {'server': "https://knowledgeplatform.atlassian.net/"}
     #jiraOptions = {'server': serv}
 
-    jira = JIRA(options=jiraOptions, basic_auth=("mangalyogesh.22@gmail.com", "I7OMcW1LerHmcd9e6kh552CB"))
+    jira = JIRA(options=jiraOptions, basic_auth=("mangalyogesh.22@gmail.com", "3TUrgCSma6HZGy6PKKWj3EE3"))
     #jira = JIRA(options=jiraOptions, basic_auth=(gm, tok))
     
     for singleIssue in jira.search_issues(jql_str='project = knowledgeplatform'):
@@ -318,7 +318,6 @@ def jira(request):
         d['summary'].append(singleIssue.fields.summary)
         d['name'].append(singleIssue.fields.reporter.displayName)    
     print(d,type(d))
-
     return render(request,'knowledgepages/jira.html')
 
 

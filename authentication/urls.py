@@ -28,4 +28,6 @@ urlpatterns = [
    path('freshdeskdisplay', views.freshdeskdisplay,name='freshdeskdisplay'),
    path('salesforce', views.salesforce,name='salesforce'),
    path('salesforcedisplay', views.salesforcedisplay,name='salesforcedisplay'),
+   path('search', views.search, name="search"),
+   
 ]

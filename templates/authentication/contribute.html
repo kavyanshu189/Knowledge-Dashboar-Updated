@@ -10,12 +10,51 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
     <link rel="icon" href="https://klaindustries.com/wp-content/uploads/2017/07/Light-bulb-icon.png" width="300" height="300" type="image/icon type">
     <title> {% block title %}Contribute{% endblock title %} | Knowledge Platform </title>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script>
+
+      $(document).ready(function () {
+  
+          $('#ptype').change(function () {
+              var szTr;
+              var iRowCount = 0;
+  
+              var szSelectedText = $(this).find('option:selected').text();
+  
+  
+              if ($("#table tbody tr:has(td:eq(1):contains('" + szSelectedText + "'))").length > 0) {
+                  alert("Duplicate!!!!")
+                  return;
+              }
+              else {
+                  iRowCount = $('#table tbody tr').length + 1;
+                  szTr = "<tr>"
+                  szTr = szTr + "<td>" + iRowCount + "</td>";
+                  szTr = szTr + "<td>" + $(this).find('option:selected').text() + "</td>"
+                  szTr = szTr + "<td><input type='text' class='date_from' placeholder='Enter your ticket id.'></td>"
+                  szTr = szTr + "<td class='delete'>Delete</td>"
+                  szTr = szTr + "</tr>"
+                  $('#table tbody').append(szTr)
+              }
+  
+          });
+  
+          $('#table').on('click','.delete',function () {
+            $(this).closest('tr').remove();
+            $('#btnSort').trigger('click');
+        });
+      });
+  </script>
+</head>
+
     <body>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="#">KNOWLEDGE PLATFORM</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
+{% comment %} NAVIGATION STARTS HERE {% endcomment %}
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
@@ -43,14 +82,17 @@
           <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Issue Tracking
           </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="jira">Jira</a>
-          <a class="dropdown-item" href="salesforce">Salesforce</a>
-          <a class="dropdown-item" href="freshdesk">FreshDesk</a>
-        </div>
-      </li>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="jira">Jira</a>
+            <a class="dropdown-item" href="salesforce">Salesforce</a>
+            <a class="dropdown-item" href="freshdesk">FreshDesk</a>
+          </div>
+        </li>
       </div>
-      
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button> &nbsp &nbsp&nbsp&nbsp
+      </form>
       <div class="btn-group">
         <img type="button" src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/30/ffffff/external-user-interface-kiranshastry-lineal-kiranshastry-1.png" class="btn btn-primary"/>
         <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" >
@@ -59,19 +101,20 @@
         </button>
         {% if user.is_authenticated %}
         <ul class="dropdown-menu">
-          {% comment %} <li><a class="dropdown-item" href="/signup" >Sign up</a></li> {% endcomment %}
-          {% comment %} <li><a class="dropdown-item" href="/signin">Sign in</a></li> {% endcomment %}
           <li><a class="dropdown-item" href="/signout">Sign out</a></li>
         </ul>
         {% else %}
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="/signup" >Sign up</a></li>
           <li><a class="dropdown-item" href="/signin">Sign in</a></li>
-          {% comment %} <li><a class="dropdown-item" href="/signout">Sign out</a></li> {% endcomment %}
         </ul>
         {% endif %}
       </div>
     </nav>
+
+{% comment %} Navigation ends here {% endcomment %}
+
+
     <section style="background-color:#00a0ff; height:25; " >
       <br>
       <h1  style="color: #ffffff"><center>Welcome to Knowledge Platform</center></h1><br>
@@ -83,26 +126,37 @@
     <center>
     <form method="post" action="/contribute">
     {% csrf_token %}
-        <div class="form-group">
-            <label for="ptype">Problem Type</label> 
-            
-            <select id="ptype" name="ptype">
-                <option value="defect">Defect</option>
-                <option value="enhancement">Enhancement</option>
-                <option value="supportticket">Support Ticket</option>
-                <option value="opportunity">Opportunity</option>
-            </select> 
+    {% comment %} <div class="form-group">
+      <label for="ptype">Problem Type</label> 
+      
+      <select id="ptype" name="ptype">
+          <option value="defect">Defect</option>
+          <option value="enhancement">Enhancement</option>
+          <option value="supportticket">Support Ticket</option>
+          <option value="opportunity">Opportunity</option>
+      </select> 
+  </div> {% endcomment %}
+    <div class="form-group" >
+      <label for="ptype">Problem Type</label> <br>
+    <select id="ptype" name="ptype">
+      <option value="Problem Type">Choose your problem type</option>
+      <option value="Defect">Defect</option>
+      <option value="Enhancement">Enhancement</option>
+      <option value="Support Ticket">Support Ticket</option>
+      <option value="Opportunity">Opportunity</option>
+    </select>
+    <table id="table" ><thead><tr></thead><tbody></tbody></table>
         </div>
 
 
         <div class="form-group">
-            <label for="psummary">Problem Summary</label> 
-            <input type="text" id="psummary" name="psummary">
+            <label for="psummary">Problem Summary</label> <br>
+            <textarea style="border-color:#00a0ff; padding:10px 10px" type="Summary" id="psummary" name="psummary" cols="80" rows="10" placeholder="Enter your Problem Summary"></textarea>
         </div>
         
         <div class="form-group">
-            <label for="pdescription">Problem Description</label> 
-            <input type="text" id="pdescription" name="pdescription">
+            <label for="pdescription">Problem Description</label> <br>
+            <textarea style="border-color:#00a0ff; padding:10px 10px" type="Summary" id="pdescription" name="pdescription" cols="80" rows="10" placeholder="Enter your Problem description"></textarea>
         </div>      
         
         <div class="form-group">
@@ -117,21 +171,24 @@
       </div>
 
         <div class="form-group">
-            <label for="kanalysis">Knowledge Analysis</label> 
-            <input type="text" id="kanalysis" name="kanalysis">
+            <label for="kanalysis">Knowledge Analysis</label> <br>
+            <textarea style="border-color:#00a0ff; padding:10px 10px" type="text" id="kanalysis" name="kanalysis" cols="80" rows="5" placeholder="Enter your Knowledge Analysis"></textarea>
+
         </div>      
         
         <div class="form-group">
-            <label for="kinsisghts">Knowledge Insights</label> 
-            <input type="text" id="kinsisghts" name="kinsisghts">
+            <label for="kinsisghts">Knowledge Insights</label> <br>
+            <textarea style="border-color:#00a0ff; padding:10px 10px" type="text" id="kinsisghts" name="kinsisghts" cols="80" rows="5" placeholder="Enter your Knowledge Insights"></textarea>
+
         </div>   
 
         <div class="form-group">
-            <label for="tags">Knowledge tags</label> 
-            <input type="text" id="tags" name="tags" >
+            <label for="tags">Knowledge tags</label> <br>
+            <textarea style="border-color:#00a0ff; padding:10px 10px" type="text" id="tags" name="tags" cols="80" rows="3" placeholder="Enter your Knowledge Tags"></textarea>
+
         </div> 
         <div class="form-group">
-            <label for="owner">Owner</label> 
+            <label for="owner">Owner</label> <br>
             <input type="text" id="owner" name="owner">
         </div>   
         <button class="btn btn-primary" type="submit">Submit</button>

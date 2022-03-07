@@ -33,20 +33,20 @@ import numpy
 from jira import JIRA
 from simple_salesforce import Salesforce
 import requests
+# from authentication import models
+from authentication.models import Contribute
 
 
 # Create your views here.
-def index(request):
-    context = {
-        "variable1":"Knowledge Platform is great",
-        "variable2":"CDATA is great"
-    } 
-    return render(request, "authentication/index.html", context)
+''' This function is receiving a request from the client 
+and rendering the response of the request to the server by taking him to the homepage'''
 
-def about(request):
-    return render(request, 'authentication/about.html') 
+def index(request):
+    return render(request, "authentication/index.html")
 
 def signup(request):
+    ''' Here POST method is used which is a HTTP method 
+    designed to send data to the server from an HTTP client '''
     
     if request.method == "POST":
         # global username 
@@ -73,7 +73,9 @@ def signup(request):
         #     messages.error(request, "Username must be Alpha-Numeric!")
         #     return redirect('home')
         
-     
+        ''' Create_user creates, saves and return a user. Also, it keeps the the password 
+        safe by returning its hash value. '''
+
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
         myuser.last_name = lname
@@ -85,10 +87,18 @@ def signup(request):
         
         #welcome email
         
-        subject = "Welcome to Knowledge Platform - Django Login!!"
-        message = "Hello" + myuser.first_name + "!! \n" + "Welcome to Knowledge Platform!! \n Thank You for visiting our website \n We have also sent you a confirmation email, Please confirm your email address in order to activate yor account. \n\n Thanking You\n Smriti Misra"
+        subject = "Welcome to Knowledge Platform - Login Page!"
+        message = "Hello " + myuser.first_name + "! \n" + "Welcome to Knowledge Platform!  \n Thank You for visiting our website \n We have also sent you a confirmation email, Please confirm your email address in order to activate yor account. \n\n Regards\n Team Knowledge Platform"
         from_email = settings.EMAIL_HOST_USER
         to_list = [myuser.email]
+
+
+        '''send_mail : Easy wrapper for sending a single message to a recipient list. 
+        All members of the recipient list will see the other recipients in the 'To' field.If from_email 
+        is None, use the DEFAULT_FROM_EMAIL setting. 
+        If auth_user is None, use the EMAIL_HOST_USER setting. 
+        If auth_password is None, use the EMAIL_HOST_PASSWORD setting.'''
+
         send_mail(subject, message, from_email, to_list, fail_silently=True)
         
         
@@ -115,8 +125,16 @@ def signup(request):
     
     return render(request, "authentication/signup.html")
 
+    ''' Contribute : By this method, user can fill his problem type, description, summary, products mapped, 
+    analysis of his problem, insights, tags and the owner of the knowledge.'''
+
+
 def contribute(request):
     if request.method == "POST":
+        
+        ''' All the required information for all attributes of knowledge has been taken from client and saved in
+        respective variables'''
+
         ptype=request.POST['ptype']
         psummary=request.POST['psummary']
         pdescription=request.POST['pdescription']
@@ -127,6 +145,14 @@ def contribute(request):
         owner=request.POST['owner']     
         datetime_entry = datetime.datetime.now() 
         # username = request.session.get('username') 
+        
+        '''This data we have saved in sqlite database '''
+        
+        contr=Contribute(ptype=ptype,psummary=psummary,pdescription=pdescription,products=products,kanalysis=kanalysis,kinsisghts=kinsisghts,tags=tags,owner=owner)
+        contr.save()
+
+        '''This data we have saved in mongodb database as well as neo4j database.'''
+
         conn = MongoClient()
         db=conn.Lucid
         collection=db.knowledge
@@ -134,8 +160,9 @@ def contribute(request):
         
         # # if datetime_logout1 is None:
         #     datetime_logout1=0  
+        ''' making a collection rec1 for mongodb'''
         rec1={
-          "username":username1,          
+        #   "username":username1,          
           "ptype":ptype,
           "psummary":psummary,
           "pdescription":pdescription,
@@ -144,39 +171,42 @@ def contribute(request):
           "kinsisghts":kinsisghts,
           "tags":tags,
           "owner":owner,
-          "date_of_entry":datetime_entry.strftime('%Y/%m/%d %I:%M:%S:%p'),
-          "date_of_login":datetime_login1.strftime('%Y/%m/%d %I:%M:%S:%p'),
+        #   "date_of_entry":datetime_entry.strftime('%Y/%m/%d %I:%M:%S:%p'),
+        #   "date_of_login":datetime_login1.strftime('%Y/%m/%d %I:%M:%S:%p'),
         #   "date_of_logout":datetime_logout1
         }
         collection.insert_one(rec1)
 
         # added neo4j database
-        #neo4j_create_statemenet = "create (a: Problem{name:'%s'}), (k:Owner {owner:'%s'}), (l:Problem_Type{type:'%s'}),(m:Problem_Summary{summary:'%s'}), (n:Probelm_Description{description:'%s'}),(o:Knowledge_Analysis{analysis:'%s'}), (p:Knowledge_Insights{kinsisghts:'%s'}), (a)-[:Owner]->(k), (a)-[:Problem_Type]->(l), (a)-[:Problem_Summary]->(m), (a)-[:Problem_Description]->(n), (a)-[:Knowledge_analysis]->(o), (a)-[:Knowledge_insights]->(p)"%("Problem",owner,type,summary,description,analysis,insights)
-        graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
-        session=graphdb.session()
-        q2='''Merge (a:Owner {owner:'%s'})
-        Merge (b:Problem_Type{ptype:'%s'}) 
-        Merge(c:Problem_Summary{psummary:'%s'})
-        Merge (d:Problem_Description{pdescription:'%s'})
-        Merge (e:Knowledge_Analysis{kanalysis:'%s'})
-        Merge(f:Knowledge_Insights{kinsisghts:'%s'})
-        Merge (g:Tag{tag:'%s'})
-        Merge (h:Product{product:'%s'})
-        MERGE (b)-[:OWNER]->(a)
-        MERGE (b)-[:PROBLEM_SUMMARY]->(c)
-        MERGE (b)-[:PROBLEM_DESCRIPTION]->(d)
-        MERGE (b)-[:KNOWLEDGE_ANALYSIS]->(e)
-        MERGE (b)-[:KNOWLEDGE_INSIGHTS]->(f)
-        MERGE (b)-[:TAG]->(g)
-        MERGE (b)-[:PRODUCT]->(h)'''%(owner,ptype,psummary,pdescription,kanalysis,kinsisghts,tags,*products)
-        q1=" match(n) return n "
+        # neo4j_create_statemenet = "create (a: Problem{name:'%s'}), (k:Owner {owner:'%s'}), (l:Problem_Type{type:'%s'}),(m:Problem_Summary{summary:'%s'}), (n:Probelm_Description{description:'%s'}),(o:Knowledge_Analysis{analysis:'%s'}), (p:Knowledge_Insights{kinsisghts:'%s'}), (a)-[:Owner]->(k), (a)-[:Problem_Type]->(l), (a)-[:Problem_Summary]->(m), (a)-[:Problem_Description]->(n), (a)-[:Knowledge_analysis]->(o), (a)-[:Knowledge_insights]->(p)"%("Problem",owner,type,summary,description,analysis,insights)
+        # graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
+        # session=graphdb.session()
+        # q2='''Merge (a:Owner {owner:'%s'})
+        # Merge (b:Problem_Type{ptype:'%s'}) 
+        # Merge(c:Problem_Summary{psummary:'%s'})
+        # Merge (d:Problem_Description{pdescription:'%s'})
+        # Merge (e:Knowledge_Analysis{kanalysis:'%s'})
+        # Merge(f:Knowledge_Insights{kinsisghts:'%s'})
+        # Merge (g:Tag{tag:'%s'})
+        # Merge (h:Product{product:'%s'})
+        # MERGE (b)-[:OWNER]->(a)
+        # MERGE (b)-[:PROBLEM_SUMMARY]->(c)
+        # MERGE (b)-[:PROBLEM_DESCRIPTION]->(d)
+        # MERGE (b)-[:KNOWLEDGE_ANALYSIS]->(e)
+        # MERGE (b)-[:KNOWLEDGE_INSIGHTS]->(f)
+        # MERGE (b)-[:TAG]->(g)
+        # MERGE (b)-[:PRODUCT]->(h)'''%(owner,ptype,psummary,pdescription,kanalysis,kinsisghts,tags,*products)
+        # q1=" match(n) return n "
     
-        session.run(q2)
-        session.run(q1)
+        # session.run(q2)
+        # session.run(q1)
 
         messages.success(request, 'Your message has been sent!')
         return redirect('signout')
     return render(request, 'authentication/contribute.html')
+
+'''This method helps to display all the knowledges containing defects as problem type 
+from mongodb by rendering a dictionary named as defectdata'''
 
 
 def defects(request):
@@ -186,16 +216,18 @@ def defects(request):
     defectdata =collection.find({'ptype':'defect'})
     return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
 
+'''This method helps to display all the knowledges containing defects as problem type 
+from neo4j by rendering a dictionary named as defectdata'''
+
 def defect(request):
-    # conn = MongoClient()
-    # db=conn.Lucid
-    # collection=db.knowledge
-    # defectdata =collection.find({'ptype':'defect'})
     graphdb=GraphDatabase.driver(uri = "bolt://localhost:7687", auth=("neo4j", "admin"))
     session=graphdb.session()
     q3="Match (t:Problem_Type)-[r:PROBLEM_DESCRIPTION]-> (c:Problem_Description) return t.ptype AS p_type,c.pdescription AS p_description"
     nodes=session.run(q3)
     return render(request, 'knowledgepages/defect.html', {'nodes': nodes}) 
+
+'''This method helps to display all the knowledges containing enhancement as problem type 
+from mongodb by rendering a dictionary named as defectdata'''
 
 def enhancements(request):
     conn = MongoClient()
@@ -204,12 +236,18 @@ def enhancements(request):
     enhancementdata =collection.find({'ptype':'enhancement'})
     return render(request, 'knowledgepages/enhancements.html', {'enhancementdata': enhancementdata.clone()})
 
+'''This method helps to display all the knowledges containing supportticket as problem type 
+from mongodb by rendering a dictionary named as defectdata'''
+
 def supportticket(request):
     conn = MongoClient()
     db=conn.Lucid
     collection=db.knowledge
     supportdata =collection.find({'ptype':'supportticket'})
     return render(request, 'knowledgepages/supportticket.html', {'supportdata': supportdata.clone()})
+
+'''This method helps to display all the knowledges containing opportunity as problem type 
+from mongodb by rendering a dictionary named as defectdata'''
 
 def opportunity(request):
     conn = MongoClient()
@@ -231,7 +269,8 @@ def signin(request):
         pass1 = request.POST['pass1']
         
     #below we are doing user authentication  
-      
+
+        '''If the given credentials are valid, return a User object.'''
         user = authenticate(username=username, password=pass1)   
          
         if user is not None:
@@ -298,7 +337,7 @@ def jira(request):
     jiraOptions = {'server': "https://knowledgeplatform.atlassian.net/"}
     #jiraOptions = {'server': serv}
 
-    jira = JIRA(options=jiraOptions, basic_auth=("akshaysrivastava0406@gmail.com", "ASOQ6fJbuTie2ysONaENA07E"))
+    jira = JIRA(options=jiraOptions, basic_auth=("akshaysrivastava0406@gmail.com", "m6cyJXy6Jop0mZZQAPcR9CDB"))
     #jira = JIRA(options=jiraOptions, basic_auth=(gm, tok))
     
     for singleIssue in jira.search_issues(jql_str='project = knowledgeplatform'):
@@ -337,13 +376,7 @@ def freshdesk(request):
     #                              tags=['example'])
     
     ticket = a.tickets.list_tickets(filter_name=None)
-    ticket1 = a.tickets.get_ticket(4)
-    print("Ticket is created at :",end="\t" )
-    print(ticket1.created_at)
-    print(ticket1.priority)
-    # print(ticket1.source)
-    print(ticket1.status)
-    # print(ticket1.stats)
+
     
     global freshdesk_Ticket
     freshdesk_Ticket={'ticket':[]}
@@ -386,4 +419,20 @@ def salesforcedisplay(request):
     context={'mlt':mlt,}
     return render(request, 'knowledgepages/salesforcedisplay.html',context)
 
+'''Search Method : This search method is used for searching any knowledge by the name of problem type.
+    The knowledge is searched from MongoDb database.'''
+
+def search(request):
+    conn = MongoClient()
+    db=conn.Lucid
+    collection=db.knowledge
+    if request.method=="POST":
+        searched=request.POST['searched']
+        login=Contribute.objects.filter(owner__contains=searched) 
+        defectdata =collection.find({'ptype':searched})
+        # return render(request, 'knowledgepages/defects.html', {'defectdata': defectdata.clone()}) 
+        return render(request,'authentication/search.html',{'searched':searched,'defectdata': defectdata.clone()})
+    else:
+        return render(request,'authentication/search.html') 
+    
 

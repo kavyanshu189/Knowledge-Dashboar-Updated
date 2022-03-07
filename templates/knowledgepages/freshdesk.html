@@ -24,7 +24,7 @@
               <a class="nav-link" href="/">Home</a>
             </li>      
         
-            <li class="nav-item active">
+            <li class="nav-item inactive">
               <a class="nav-link" href="/contribute">Contribute<span class="sr-only">(current)</span></a>
             </li>
             
@@ -41,9 +41,9 @@
               <a class="dropdown-item" href="supportticket">Support Ticket</a>
             </div>
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown active">
             <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Issue Tracking
+              Issue Tracking <span class="sr-only">(current)
             </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="jira">Jira</a>
@@ -51,7 +51,12 @@
             <a class="dropdown-item" href="freshdesk">FreshDesk</a>
           </div>
         </li>
+        
         </div>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button> &nbsp &nbsp&nbsp&nbsp
+        </form>
         
         <div class="btn-group">
           <img type="button" src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/30/ffffff/external-user-interface-kiranshastry-lineal-kiranshastry-1.png" class="btn btn-primary"/>
@@ -83,9 +88,9 @@
       <center>
         <form action="freshdeskdisplay" method="post">
             {% csrf_token %}
-           <label for="api">Enter API Key:</label>
+           <label for="api">Enter Freshdesk API Key:</label>
            <input type="text" id="api" name="api"><br><br>
-           <label for="domain">Enter your Domain:</label>
+           <label for="domain">Enter your Freshdesk Domain:</label>
            <input type="text" id="domain" name="domain"><br><br>
     
            <button type="submit">GetDetails</button>
